@@ -50,6 +50,11 @@ void paged_attention_v2(
     const int64_t blocksparse_vert_stride, const int64_t blocksparse_block_size,
     const int64_t blocksparse_head_sliding_step);
 
+// Used for cascade attention in V1's flash-attn backend.
+void merge_attn_states(torch::Tensor& output, torch::Tensor& prefix_output,
+                       torch::Tensor& prefix_lse, torch::Tensor& suffix_output,
+                       torch::Tensor& suffix_lse);
+
 void rms_norm(torch::Tensor& out, torch::Tensor& input, torch::Tensor& weight,
               double epsilon);
 

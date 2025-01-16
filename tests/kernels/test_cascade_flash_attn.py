@@ -3,9 +3,9 @@ from typing import List, Optional, Tuple
 import pytest
 import torch
 
+from vllm import _custom_ops as ops
 from vllm.platforms import current_platform
-from vllm.v1.attention.backends.flash_attn import (cascade_attention,
-                                                   merge_attn_states)
+from vllm.v1.attention.backends.flash_attn import cascade_attention
 from vllm.vllm_flash_attn import flash_attn_varlen_func
 
 NUM_HEADS = [(4, 4), (8, 2), (16, 2)]
@@ -45,8 +45,8 @@ def test_merge_kernel(
 
     # Run the kernel.
     output = torch.empty(num_tokens, num_query_heads, head_size, dtype=dtype)
-    merge_attn_states(output, prefix_output, prefix_lse, suffix_output,
-                      suffix_lse)
+    ops.merge_fa_attn_states(output, prefix_output, prefix_lse, suffix_output,
+                             suffix_lse)
 
     # Reference implementation.
     max_lse = torch.maximum(prefix_lse, suffix_lse)

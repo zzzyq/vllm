@@ -122,6 +122,17 @@ def paged_attention_rocm(
                                       kv_cache_dtype, k_scale, v_scale)
 
 
+def merge_fa_attn_states(
+    output: torch.Tensor,
+    prefix_output: torch.Tensor,
+    prefix_lse: torch.Tensor,
+    suffix_output: torch.Tensor,
+    suffix_lse: torch.Tensor,
+) -> None:
+    torch.ops._C.merge_attn_states.default(output, prefix_output, prefix_lse,
+                                           suffix_output, suffix_lse)
+
+
 # pos encoding ops
 def rotary_embedding(
     positions: torch.Tensor,
