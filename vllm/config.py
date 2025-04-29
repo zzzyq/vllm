@@ -2869,14 +2869,14 @@ def _get_and_verify_dtype(
 
             from vllm.platforms import current_platform
             if (current_platform.is_cpu()
-                    and current_platform.get_cpu_architecture()
-                    == CpuArchEnum.POWERPC
+                    and (current_platform.get_cpu_architecture() in
+                          (CpuArchEnum.POWERPC, CpuArchEnum.X86))
                     and (config_dtype == torch.float16
                          or config_dtype == torch.float32)):
                 logger.info(
-                    "For POWERPC, we cast models to bfloat16 instead of "
+                    "For POWERPC/X86, we cast models to bfloat16 instead of "
                     "using float16 by default. Float16 is not currently "
-                    "supported for POWERPC.")
+                    "supported for POWERPC/X86.")
                 torch_dtype = torch.bfloat16
 
             # TODO: change this condition to check if the platform support bf16
